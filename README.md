@@ -1,0 +1,2 @@
+# aurorasdk
+Aurora Console SDK
