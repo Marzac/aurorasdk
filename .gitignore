@@ -1,0 +1,74 @@
+# Git accept file
+# Work opposite as intended
+
+# Ignore everything except sub-folders and this configuration file
+*
+!*/
+!.gitignore
+
+# Accept all source code
+!*.c
+!*.cpp
+!*.h
+!*.rc
+!*.s
+!*.asm
+!*.inc
+!*.gld
+!*.xml
+
+# Accept project settings / build commands
+!*.mk
+!*.properties
+!*.bash
+!*.sh
+!Makefile
+
+# Accept information files
+!TODO
+!INSTALL
+!CHANGES
+!README
+
+# Accept projects documents
+!*.html
+!*.php
+!*.doc
+!*.docx
+!*.xml
+!*.txt
+!*.pdf
+!*.rtf
+!*.tex
+!*.csv
+!*.ods
+!*.odt
+
+# Accept 2D artwork / 3D models
+!*.bmp
+!*.png
+!*.jpg
+!*.tga
+!*.gif
+!*.svg
+!*.x
+!*.3ds
+!*.obj
+!*.blender
+!*.wings
+
+# Accept sound elements / music
+!*.aud
+!*.mid
+!*.midi
+!*.syx
+!*.wav
+!*.ogg
+!*.mp3
+!*.aac
+!*.flac
+
+# Accept schematics / simulations
+!*.asc
+!*.dsn
+!*.fpc
