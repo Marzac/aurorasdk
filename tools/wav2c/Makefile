@@ -32,7 +32,7 @@
   
 SOURCES=wav2h.c
 all: ${SOURCES} | types.h
-	${CC} -std=c99 $^ -o wav2c.exe
+	${CC} -Wall -std=c99 $^ -o wav2c.exe
 
 clean:
 	rm wav2c.exe

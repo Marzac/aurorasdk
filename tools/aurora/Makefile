@@ -32,7 +32,7 @@
   
 SOURCES=aurora.c rs232_win.c rs232_linux.c 
 all: ${SOURCES} | types.h rs232.h
-	${CC} -std=c99 $^ -o aurora.exe
+	${CC} -Wall -std=c99 $^ -o aurora.exe
 
 clean:
 	rm aurora.exe

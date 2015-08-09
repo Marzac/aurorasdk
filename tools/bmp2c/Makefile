@@ -29,10 +29,10 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-  
+ 
 SOURCES=bmp2c.c
 all: ${SOURCES} | types.h
-	${CC} -std=c99 $^ -o bmp2c.exe
+	${CC} -Wall -std=c99 $^ -o bmp2c.exe
 
 clean:
 	rm bmp2c.exe
