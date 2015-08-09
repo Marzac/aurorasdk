@@ -40,18 +40,9 @@ typedef int             bool;
 #define true            -1
 #define false           0
 
-typedef enum {
-	COM_UNKNOWN = 0,
-	COM_ENUM,
-	COM_CLOSED,
-	COM_OPENED,
-	COM_ERROR
-} COM_STATUS;
-
 typedef struct {
 	int port;
 	void * handle;
-	COM_STATUS status;
 } COMDevice;
 
 /*****************************************************************************/
@@ -159,7 +150,7 @@ int comEnumerate()
 	while(port > 0 && noDevices < COM_MAXDEVICES) {
 		COMDevice * com = &comDevices[noDevices ++];
 		com->port = port;
-		com->status = COM_ENUM;
+		com->handle	= 0;
 		nlist = findPattern(nlist, comPtn, &port);
 	}
 	free(list);
@@ -176,6 +167,8 @@ int comGetNoPorts()
 char comName[COM_MAXNAME];
 const char * comGetPortName(int index)
 {
+	if (index < 0 || index >= noDevices)
+		return 0;
 	sprintf(comName, "COM%i", comDevices[index].port);
 	return comName;
 }
@@ -191,6 +184,8 @@ int comFindPort(const char * name)
 
 const char * comGetInternalName(int index)
 {
+	if (index < 0 || index >= noDevices)
+		return 0;
 	sprintf(comName, "//./COM%i", comDevices[index].port);
 	return comName;
 }
@@ -200,13 +195,13 @@ int comOpen(int index, int baudrate)
 {
     DCB config;
     COMMTIMEOUTS timeouts;
-// Check the port status
-	COMDevice * com = &comDevices[index];
-	if (com->status != COM_ENUM) return 0;
+	if (index < 0 || index >= noDevices) 
+		return 0;
 // Open COM port
+	COMDevice * com = &comDevices[index];
     void * handle = CreateFileA(comGetInternalName(index), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-    if (handle == INVALID_HANDLE_VALUE) return 0;
-	com->status = COM_OPENED;
+    if (handle == INVALID_HANDLE_VALUE) 
+    	return 0;
 	com->handle = handle;
 // Prepare read / write timeouts
 	SetupComm(handle, 64, 64);
@@ -239,15 +234,26 @@ int comOpen(int index, int baudrate)
 void comClose(int index)
 {
 // Check the port status
+	if (index < 0 || index >= noDevices) 
+		return;
 	COMDevice * com = &comDevices[index];
-	if (com->status != COM_OPENED) return;
+	if (!com->handle) 
+		return;
 	CloseHandle(com->handle);
-	com->status = COM_CLOSED;
+	com->handle = 0;
+}
+
+void comCloseAll()
+{
+	for (int i = 0; i < noDevices; i++)
+		comClose(i);
 }
 
 /*****************************************************************************/
 int comWrite(int index, const char * buffer, size_t len)
 {
+	if (index < 0 || index >= noDevices)
+		return 0;
 	COMDevice * com = &comDevices[index];
     uint32_t bytes = 0;
     WriteFile(com->handle, buffer, len, &bytes, NULL);
@@ -256,6 +262,8 @@ int comWrite(int index, const char * buffer, size_t len)
 
 int comRead(int index, char * buffer, size_t len)
 {
+	if (index < 0 || index >= noDevices)
+		return 0;
 	COMDevice * com = &comDevices[index];
     uint32_t bytes = 0;
     ReadFile(com->handle, buffer, len, &bytes, NULL);

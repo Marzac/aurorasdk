@@ -44,6 +44,7 @@
 /*****************************************************************************/
     int  comOpen(int index, int baudrate);
     void comClose(int index);
+    void comCloseAll();
     int  comWrite(int index, const char * buffer, size_t len);
     int  comRead(int index, char * buffer, size_t len);
 

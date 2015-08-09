@@ -1,7 +1,7 @@
 /*
     Cross-platform serial / RS232 library
     Version 0.1, 16/06/2015
-    -> LINUX implementation
+    -> LINUX and MacOS implementation
     -> rs232-linux.c
 
 	The MIT License (MIT)
@@ -31,10 +31,12 @@
   
 */
 
-#if defined(__unix__) || defined(__unix)
+#if defined(__unix__) || defined(__unix) || \
+	defined(__APPLE__) && defined(__MACH__)
+
+#define _DARWIN_C_SOURCE
 
 #include <unistd.h>
-#define __USE_MISC // For CRTSCTS
 #include <termios.h>
 #include <fcntl.h>
 #include <string.h>
@@ -46,32 +48,25 @@ const char * comGetPortName(int index);
 int comFindPort(const char * name);
 const char * comGetInternalName(int index);
 
-typedef enum {
-	COM_UNKNOWN = 0,
-	COM_ENUM,
-	COM_CLOSED,
-	COM_OPENED,
-	COM_ERROR
-} COM_STATUS;
-
+/*****************************************************************************/
 typedef struct {
 	const char * port;
 	int handle;
-	COM_STATUS status;
 } COMDevice;
 
-static COMDevice enumeratedports[] = { // TODO: Real enumeration
-    {"/dev/ttyS0", -1, COM_UNKNOWN},
-    {"/dev/ttyS1", -1, COM_UNKNOWN},
-    {"/dev/ttyS2", -1, COM_UNKNOWN},
-    {"/dev/ttyUSB0", -1, COM_UNKNOWN},
-    {"/dev/ttyUSB1", -1, COM_UNKNOWN},
-    {"/dev/ttyUSB2", -1, COM_UNKNOWN},
-    {"/dev/rfcomm0", -1, COM_UNKNOWN}
+static COMDevice comDevices[] = { // TODO: Real enumeration
+    {"/dev/ttyS0",   -1},
+    {"/dev/ttyS1",   -1},
+    {"/dev/ttyS2",   -1},
+    {"/dev/ttyUSB0", -1},
+    {"/dev/ttyUSB1", -1},
+    {"/dev/ttyUSB2", -1},
+    {"/dev/rfcomm0", -1}
 };
 
-static unsigned int enumeratedportnb = sizeof(enumeratedports)/sizeof(*enumeratedports);
+static unsigned int noDevices = sizeof(comDevices)/sizeof(*comDevices);
 
+/*****************************************************************************/
 int _BaudFlag(int BaudRate)
 {
     switch(BaudRate)
@@ -93,55 +88,48 @@ int _BaudFlag(int BaudRate)
         case 57600:   return B57600; break;
         case 115200:  return B115200; break;
         case 230400:  return B230400; break;
-        case 460800:  return B460800; break;
-        case 500000:  return B500000; break;
-        case 576000:  return B576000; break;
-        case 921600:  return B921600; break;
-        case 1000000: return B1000000; break;
-        case 1152000: return B1152000; break;
-        case 1500000: return B1500000; break;
-        case 2000000: return B2000000; break;
         default : return B0; break;
     }
 }
 
+/*****************************************************************************/
 int comEnumerate()
 {
-    return enumeratedportnb;
+    return noDevices;
 }
 
 int comGetNoPorts()
 {
-    return enumeratedportnb;
+    return noDevices;
 }
 
 int comFindPort(const char * name)
 {
     int p;
-    for (p = 0; p < enumeratedportnb; p++)
-        if (strcmp(name, enumeratedports[p].port) == 0)
+    for (p = 0; p < noDevices; p++)
+        if (strcmp(name, comDevices[p].port) == 0)
             return p;
     return -1;
 }
 
 const char * comGetInternalName(int index)
 {
-    comGetPortName(index);
+    return comGetPortName(index);
 }
 
 const char * comGetPortName(int index) {
-    if (index > enumeratedportnb || index < 0)
+    if (index >= noDevices || index < 0)
         return 0;
-    return enumeratedports[index].port;
+    return comDevices[index].port;
 }
 
 int comOpen(int index, int baudrate)
 {
-    if (index > enumeratedportnb || index < 0)
+    if (index >= noDevices || index < 0)
         return 0;
-
 // Open port
-    const char * name = enumeratedports[index].port;
+	COMDevice * com = &comDevices[index];
+    const char * name = com->port;
     int handle = open(name, O_RDWR | O_NOCTTY | O_NDELAY);
     if (handle < 0)
         return 0;
@@ -166,34 +154,48 @@ int comOpen(int index, int baudrate)
         close(handle);
         return 0;
     }
-    enumeratedports[index].handle = handle;
-    enumeratedports[index].status = COM_OPENED;
+    com->handle = handle;
     return 1;
 }
 
-void comClose(int index) {
-    if (index > enumeratedportnb || index < 0)
-        return;
-    if (enumeratedports[index].handle >= 0) {
-        tcflush(enumeratedports[index].handle, TCIOFLUSH);
-        close(enumeratedports[index].handle);
-        enumeratedports[index].status = COM_CLOSED;
-	enumeratedports[index].handle = -1;
-    }
+void comClose(int index)
+{
+    if (index >= noDevices || index < 0)
+    	return;
+    COMDevice * com = &comDevices[index];
+    if (com->handle < 0) 
+    	return;
+    tcflush(com->handle, TCIOFLUSH);
+    close(com->handle);
+    com->handle = -1;
 }
 
-int  comWrite(int index, const char * buffer, size_t len) {
-    if (index > enumeratedportnb || index < 0 || enumeratedports[index].handle < 0)
+void comCloseAll()
+{
+	for (int i = 0; i < noDevices; i++)
+		comClose(i);
+	
+}
+
+int comWrite(int index, const char * buffer, size_t len)
+{
+    if (index >= noDevices || index < 0)
+    	return 0;
+	if (comDevices[index].handle <= 0)
         return 0;
-    int res = write(enumeratedports[index].handle, buffer, len);
+    int res = write(comDevices[index].handle, buffer, len);
     if (res < 0)
         res = 0;
     return res;
 }
-int  comRead(int index, char * buffer, size_t len) {
-    if (index > enumeratedportnb || index < 0 || enumeratedports[index].handle < 0)
+
+int comRead(int index, char * buffer, size_t len)
+{
+    if (index >= noDevices || index < 0)
+    	return 0;
+	if (comDevices[index].handle <= 0)
         return 0;
-    int res = read(enumeratedports[index].handle, buffer, len);
+    int res = read(comDevices[index].handle, buffer, len);
     if (res < 0)
         res = 0;
     return res;

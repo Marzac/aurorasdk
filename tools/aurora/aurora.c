@@ -44,12 +44,19 @@
 
 #define size(s) (sizeof(s) - 1)
 #ifdef __WIN32
-void __stdcall Sleep(u32 dwMilliseconds);
-#define yield() Sleep(0)
-#define fcloseall() _fcloseall()
-#else
-#include <sched.h>
-#define yield() sched_yield()
+	void __stdcall Sleep(u32 dwMilliseconds);
+	#define yield() Sleep(0)
+	#define fcloseall() _fcloseall()
+#elif defined(__unix__) || defined(__unix)
+	#include <sched.h>
+	#define yield() sched_yield()
+#elif (defined(__APPLE__) && defined(__MACH__))
+	#include <sched.h>
+	#define yield() sched_yield()
+  	#define fcloseall() \
+  	fclose(hexFile); \
+  	comCloseAll();
+	
 #endif
 
 /*****************************************************************************/
@@ -114,10 +121,12 @@ void lowercase(char * text);
 void signalHandler(int signal);
 
 /*****************************************************************************/
+FILE * hexFile;
+	
+/*****************************************************************************/
 int main(int argc, char * argv[])
 {
 	int i;
-	FILE * hexFile;
 	const char * hexName = NULL;
 	const char * portName = NULL;
 	int  baudrate = UART_BAUDRATE;
@@ -373,7 +382,7 @@ int programLoad(Program * pgm, FILE * hexfile)
 	}
 	pgm->data = (char *) malloc (pgm->length);
 	if (!pgm->data) {
-		printf("Cannot allocate enough memory : 0x%X bytes !\n", pgm->length);
+		printf("Cannot allocate enough memory : 0x%lX bytes !\n", pgm->length);
 		return 0;
 	}
 	if (fread(pgm->data, pgm->length, 1, hexfile) == 0) {
@@ -381,7 +390,7 @@ int programLoad(Program * pgm, FILE * hexfile)
 		free(pgm->data);
 		return 0;
 	}
-	printf("Program file loaded, size 0x%X\n", pgm->length);
+	printf("Program file loaded, size 0x%lX\n", pgm->length);
 	return 1;
 }
 
