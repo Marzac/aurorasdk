@@ -167,7 +167,7 @@ void comClose(int index)
     COMDevice * com = &comDevices[index];
     if (com->handle < 0) 
     	return;
-    tcflush(com->handle, TCIOFLUSH);
+    tcdrain(com->handle);
     close(com->handle);
     com->handle = -1;
 }
