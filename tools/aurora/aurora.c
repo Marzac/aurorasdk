@@ -297,7 +297,7 @@ int auroraErase(int port)
 	struct timeval start, stop;
 	gettimeofday(&start, NULL);
 	comWrite(port, cmdErase, size(cmdErase));
-	int res = getReply(port, &error, 1, 30000);
+	int res = getReply(port, &error, 1, 20000);
 	if (res == 1) {
 		if (error == bootAck) {
 			gettimeofday(&stop, NULL);
@@ -315,9 +315,9 @@ int auroraErase(int port)
 
 void auroraGetVersion(int port)
 {
-	char buffer[65];
+	char buffer[20];
 	comWrite(port, cmdVersion, size(cmdVersion));
-	int res = getReply(port, buffer, 64, 5000);
+	int res = getReply(port, buffer, sizeof(buffer)-1, 500);
 	buffer[res] = '\0';
 	printf("%s", buffer);
 }

@@ -62,6 +62,7 @@ static COMDevice comDevices[] = { // TODO: Real enumeration
     {"/dev/ttyUSB0", -1},
     {"/dev/ttyUSB1", -1},
     {"/dev/ttyUSB2", -1},
+    {"/dev/tty.usbserial-AUY3HS5U", -1},
     {"/dev/rfcomm0", -1}
 };
 
