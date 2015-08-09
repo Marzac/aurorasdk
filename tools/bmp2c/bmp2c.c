@@ -36,6 +36,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#define __USE_XOPEN_EXTENDED // for strdup
 #include <string.h>
 
 /*****************************************************************************/
@@ -172,9 +173,9 @@ int main(int argc, char * argv[])
 // Check and construct header name	
 	int len = strlen(cName);
 	if (len > 2 && cName[len-2] == '.' && cName[len-1] == 'c') {
-		hName = _strdup(cName);
+		hName = strdup(cName);
 		hName[len-1] = 'h';
-		hDefine = _strdup(hName);
+		hDefine = strdup(hName);
 		uppercase(hDefine);
 		hDefine[len-2] = '_';
 	}else{
