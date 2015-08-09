@@ -37,6 +37,7 @@
 #define _DARWIN_C_SOURCE
 
 #include <unistd.h>
+#define __USE_MISC // For CRTSCTS
 #include <termios.h>
 #include <fcntl.h>
 #include <string.h>
