@@ -28,6 +28,8 @@
     THE SOFTWARE.
 */
 
+#ifdef _WIN32
+
 #include "rs232.h"
 
 #include <stdio.h>
@@ -299,3 +301,5 @@ const char * findPattern(const char * string, const char * pattern, int * value)
 	* value = n;
 	return sp;
 }
+
+#endif // _WIN32

@@ -32,6 +32,7 @@
   
 */
 
+#define __USE_GNU
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -42,7 +43,14 @@
 #include "rs232.h"
 
 #define size(s) (sizeof(s) - 1)
+#ifdef __WIN32
 void __stdcall Sleep(u32 dwMilliseconds);
+#define yield() Sleep(0)
+#define fcloseall() _fcloseall()
+#else
+#include <sched.h>
+#define yield() sched_yield()
+#endif
 
 /*****************************************************************************/
 typedef enum {
@@ -302,7 +310,7 @@ void auroraGetVersion(int port)
 	comWrite(port, cmdVersion, size(cmdVersion));
 	int res = getReply(port, buffer, 64, 5000);
 	buffer[res] = '\0';
-	printf(buffer);
+	printf("%s", buffer);
 }
 
 int auroraProgram(int port, FILE * hexfile)
@@ -414,6 +422,7 @@ void programDrawBar(Program * pgm)
 	printf("0%%                                            100%%\n");
 	for (i = 0; i < pgm->state; i++)
 		putchar('=');
+	fflush(stdout);
 }
 
 void programRefreshBar(Program * pgm)
@@ -424,6 +433,7 @@ void programRefreshBar(Program * pgm)
 	if (!d) return;
 	pgm->state += d;
 	while (d --) putchar('=');
+	fflush(stdout);
 }
 
 void displayTime(struct timeval start, struct timeval stop)
@@ -446,7 +456,7 @@ int getReply(int port, char * buffer, int length, int timeout)
 		remain -= nb;
 		gettimeofday(&now, NULL);
 		if (!remain || diffms(now, start) > timeout) break;
-		Sleep(0);
+		yield();
 	}
 	return length - remain;
 }
@@ -460,7 +470,7 @@ void flushReply(int port, int timeout)
 		while (comRead(port, buffer, 16));
 		gettimeofday(&now, NULL);
 		if (diffms(now, start) > timeout) break;
-		Sleep(0);
+		yield();
 	}
 }
 
@@ -472,7 +482,7 @@ void waitms(int timeout)
 	while (!ctrlC) {
 		gettimeofday(&now, NULL);
 		if (diffms(now, start) > timeout) break;
-		Sleep(0);
+		yield();
 	}
 }
 
@@ -491,7 +501,7 @@ void signalHandler(int signal)
 	}else if (signal != SIGTERM) return;
 	if (port != -1) comClose(port);
 	if (pgm.data) free(pgm.data);
-	_fcloseall();
+	fcloseall();
 	exit(0);
 }
 
@@ -504,3 +514,4 @@ void lowercase(char * text)
 		p++;
 	}
 }
+
