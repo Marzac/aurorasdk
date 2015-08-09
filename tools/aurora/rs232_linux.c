@@ -126,7 +126,7 @@ int comFindPort(const char * name)
 
 const char * comGetInternalName(int index)
 {
-    comGetPortName(index);
+    return comGetPortName(index);
 }
 
 const char * comGetPortName(int index) {
