@@ -32,7 +32,7 @@
   
 */
 
-#define __USE_GNU
+#define  _GNU_SOURCE // for fcloseall
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
