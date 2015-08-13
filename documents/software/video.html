@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="description" content="Aurora console website" />
+  <meta name="keywords" content="open-source, programming, electronic, embedded, games, aurora, console, retrogaming, dspic, scart" />
+  <meta name="author" content="Fr&eacuted&eacuteric Meslin" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="revisit-after" content="3 month" />
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <title>Aurora SDK</title>
+	<link rel='stylesheet' href='../css/style.css' />
+</head>
+<body>
+<div id="background"></div>
+<div id="back-logo"></div>
+  <div id="inner">
+    <div id="menu">
+      <div class="menu-item float-left">
+        <a href="../index.html">Home</a>
+      </div>
+      <div class="menu-item float-left">
+        <a href="../getstarted.html">Get started</a>
+      </div>
+      <div class="menu-item float-left">
+        <a href="../hardware/video.html">Hardware</a>
+      </div>
+      <div class="menu-item float-left">
+        <a href="../software/video.html">Software</a>
+      </div>
+      <div class="menu-item float-left">
+	    <a href="../tools/tools.html">Tools</a>
+      </div>
+      <div class="menu-item float-right">
+        <a href="../FAQ.html">FAQ</a>
+      </div>
+      <div class="menu-item float-right">
+        <a href="../contact.html">Contact</a>
+      </div>
+  </div>
+
+  <div id="nav">
+  	<ul>
+  	<li><a href="../software/video.html">Video</a></li>
+  	<li><a href="../software/audio.html">Audio</a></li>
+  	<li><a href="../software/controllers.html">Controllers</a></li>
+  	<li><a href="../software/usb.html">USB</a></li>
+  	<li><a href="../software/bluetooth.html">Bluetooth</a></li>
+  	<li><a href="../software/flash.html">Flash storage</a></li>
+  	</ul>
+  </div>
+  
+  <div id="content">
+  <h3>Aurora software: video library</h3>
+  This website regroups all documents you need to start developing games for Aurora.
+  
+  <h4>General routines:</h4>
+  
+  <blockquote>
+	<kbd>void videoInit()</kbd>
+	Initialise the video subsystem. It initialises :
+	<ul>
+	  <li>every sprite (x = 0, y = 0, pixels = blank, visible = true)</li>
+	  <li>top tile layer</li>
+	  <li>bottom tile layer</li>
+	  <li>tile flash source page</li>
+	<ul>  
+  </blockquote>
+
+  <blockquote>
+    <kbd>void videoUpdate()</kbd>
+    Update the video subsystem.<br>
+    It prepares sprites to be displayed.
+  </blockquote>
+  
+  <blockquote>
+    <kbd>void videoWaitVSYNC()</kbd>
+    Wait until vertical synchronisation.<br>
+    It synchronises the program execution with the screen refresh.
+    This must be called as soon as tiles and sprites have all been updated.
+  </blockquote>
+  
+  <h4>Sprite routines:</h4>
+  
+  <blockquote>
+	<kbd>void videoSpriteClear(int sprite)</kbd>
+	<dl>
+	  <dt>int sprite</dt>
+	  <dd>sprite index</dd>
+	</dl>
+	Clear the sprite from the screen. 
+	<ul>
+	  <li>Sets sprite data to the blank sprite.</li>
+	  <li>Moves the sprite offscreen.</li>
+	</ul>
+  </blockquote>
+  
+  <blockquote>
+    <kbd>void videoSpriteSetVisible(int sprite, int visible)</kbd>
+    <dl>
+      <dt>int sprite</dt>
+	  <dd>sprite index</dd>
+	  <dt>int visible</dt>
+	  <dd>visible state</dd>
+	  <dd>0 is hidden, 1 is visible</dd>
+    </dl>
+    Show or hide sprite. Other sprite properties remain unchanged.
+    Sprites are visible by default.
+  </blockquote>
+  
+ <blockquote>
+   <kbd>void videoSpriteSetPixels(int sprite, const RamPtr pixels)</kbd>	
+   <dl>
+     <dt>int sprite</dt>
+     <dd>sprite index</dd>
+     <dd>from 0 to VIDEO_SPRITES_MAX - 1</dd>
+     <dt>const RamPtr pixels</dt>
+     <dd>pointer to pixels data in standard sram</dd>
+   </dl>
+   Associate specified sprite pixels data.
+   Sprite data <u>must be</u> allocated within the standard sram (first 32k of ram).
+  </blockquote>
+  
+  <blockquote>
+    <kbd>void videoSpriteSetPosition(int sprite, int x, int y)</kbd>
+    <dl>
+      <dt>int sprite</dt>
+      <dd>sprite index</dd>
+      <dd>from 0 to VIDEO_SPRITES_MAX - 1</dd>
+      <dt>int x</dt>
+      <dd>horizontal position in pixels</dd>
+      <dt>int y</dt>
+      <dd>vertical position in pixels</dd>
+    </dl>
+    Move the specified sprite to the desired position.
+  </blockquote>
+  
+  <blockquote>
+  <kbd>void videoSpriteSetZOrder(int sprite, int zorder)</kbd>
+  <dl>
+	<dt>int sprite</dt>
+	<dd>sprite index</dd>
+	<dt>int zorder</dt>
+	<dd>zorder value</dd>
+  </dl>
+  Set the specified sprite z-order value. Larger z-order values are rendered in front of lower ones.
+  </blockquote>
+  
+  <h4>Tile layers routines:</h4>
+
+  <blockquote>
+  <kbd>void videoTileTopSetTable(const RamPtr pointer)</kbd>
+  <dl>
+    <dt>const RamPtr pointer</dt>
+    <dd>pointer to a tileset in standard sram</dd>
+  </dl>
+  Set the ram tileset base pointer.
+  Top tilesets <u>must be</u> allocated within the standard sram (first 32k of ram).
+  </blockquote>
+                
+  <blockquote>
+  <kbd>void videoTileTopSet(int x, int y, int tile)</kbd>
+  <dl>
+    <dt>int x</dt>
+    <dd>horizontal position in tiles grid</dd>
+    <dt>int y</dt>
+    <dd>vertical position tiles grid</dd>
+    <dt>int tile</dt>
+    <dd>tile index in selected tileset</dd>
+  </dl>
+  Set the tile displayed at x, y location.
+  </blockquote>
+                
+  <blockquote>
+  <kbd>void videoTileTopFill(int tile)</kbd>
+  <dl>
+    <dt>int tile</dt>
+    <dd>tile index in current tileset</dd>
+  </dl>
+  Fill the top layer with a single ram tile.
+  </blockquote>
+
+  <blockquote>
+  <kbd>void videoTileBotSetTable(const FlashPage page, const FlashPtr pointer)</kbd>
+  <dl>
+    <dt>const FlashPage page</dt>
+    <dd>flash memory page</dd>
+    <dd>page number can be obtained with the FLASHPAGE(p) macro</dd>
+    <dt>const FlashPtr pointer</dt>
+    <dd>flash memory pointer</dd>
+    <dd>page pointer can be obtained with the FLASHPTR(p) macro.</dd>
+  </dl>
+  Set the flash tileset base pointer.
+  Bottom tilesets <u>must be</u> allocated in flash and within a single 32k page.
+  </blockquote>
+
+  <blockquote>
+  <kbd>void videoTileBotSet(int x, int y, int tile)</kbd>
+  <dl>
+    <dt>int x</dt>
+    <dd>horizontal position in tiles grid</dd>
+    <dt>int y</dt>
+    <dd>vertical position in tiles grid</dd>
+    <dt>int tile</dt>
+    <dd>tile index in current tileset</dd>
+  </dl>
+  Set the tile at x, y location.
+  </blockquote>
+
+  <blockquote>
+  <kbd>void videoTileBotFill(int tile)</kbd>
+  <dl class="dl-horizontal">
+    <dt>int tile</dt>
+    <dd>tile index in current tileset</dd>
+  </dl>
+  Fill the bottom layer with a single flash tile.
+  </blockquote>
+  </div>
+	
+</div>
+
+<div id="back-copyright"></div>
+<div id="back-legal"></div>
+<div id="back-twitter">
+  <a href="https://twitter.com/MarzacDev" class="twitter-follow-button" data-show-count="false">Follow @MarzacDev</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+</body>
+</html>
