@@ -382,7 +382,7 @@ int programLoad(Program * pgm, FILE * hexfile)
 	}
 	pgm->data = (char *) malloc (pgm->length);
 	if (!pgm->data) {
-		printf("Cannot allocate enough memory : 0x%lX bytes !\n", pgm->length);
+		printf("Cannot allocate enough memory : 0x%zX bytes !\n", pgm->length);
 		return 0;
 	}
 	if (fread(pgm->data, pgm->length, 1, hexfile) == 0) {
@@ -390,7 +390,7 @@ int programLoad(Program * pgm, FILE * hexfile)
 		free(pgm->data);
 		return 0;
 	}
-	printf("Program file loaded, size 0x%lX\n", pgm->length);
+	printf("Program file loaded, size 0x%zX\n", pgm->length);
 	return 1;
 }
 
