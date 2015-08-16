@@ -1,6 +1,6 @@
 /**
  * Aurora : serial communication utility
- * 19/07/2015 V0.5
+ * 16/08/2015 V0.6
  * (c) Frédéric Meslin 2014 - 2015
  * fredericmeslin@hotmail.com
  * Main program
@@ -32,7 +32,9 @@
   
 */
 
-#define  _GNU_SOURCE // for fcloseall
+#undef   __STRICT_ANSI__	// for fcloseall
+#define _GNU_SOURCE			// for printf with %z format
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -42,7 +44,11 @@
 #include "types.h"
 #include "rs232.h"
 
+/*****************************************************************************/
 #define size(s) (sizeof(s) - 1)
+
+/*****************************************************************************/
+/** Platform specific wrappers */
 #ifdef __WIN32
 	void __stdcall Sleep(u32 dwMilliseconds);
 	#define yield() Sleep(0)
@@ -54,9 +60,7 @@
 	#include <sched.h>
 	#define yield() sched_yield()
   	#define fcloseall() \
-  	fclose(hexFile); \
-  	comCloseAll();
-	
+  	fclose(hexFile);
 #endif
 
 /*****************************************************************************/
@@ -139,7 +143,7 @@ int main(int argc, char * argv[])
 	bool led2 = false;
 // Display information
 	printf("aurora : communication / debugging tool\n");
-	printf("         19/07/2015 - version 0.5\n");
+	printf("         16/08/2015 - version 0.6\n");
 	printf("(c) Frederic Meslin 2014 - 2015 / fredericmeslin@hotmail.com\n");
 	printf("    Please follow me on twitter : @marzacdev\n");
 	if (argc <= 1) {
@@ -506,9 +510,12 @@ int diffms(struct timeval t1, struct timeval t2)
 void signalHandler(int signal)
 {
 	if (signal == SIGINT) {
-		if (++ ctrlC < 5) return;
-	}else if (signal != SIGTERM) return;
-	if (port != -1) comClose(port);
+		if (++ ctrlC < 5) 
+			return;
+	}
+	if (signal != SIGTERM)
+		return;
+	comTerminate();
 	if (pgm.data) free(pgm.data);
 	fcloseall();
 	exit(0);

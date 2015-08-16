@@ -1,9 +1,9 @@
 # **
 # * Aurora : serial communication utility
-# * 19/07/2015 V0.5
+# * 16/08/2015 V0.6
 # * (c) Frédéric Meslin 2014 - 2015, Florent Touchard
 # * fredericmeslin@hotmail.com
-# * Main program
+# * Makefile
 # 
 #  The MIT License (MIT)
 #
@@ -29,8 +29,10 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-  
-SOURCES=aurora.c rs232_win.c rs232_linux.c 
+
+CC := gcc
+SOURCES = aurora.c rs232_win.c rs232_linux.c 
+
 all: ${SOURCES} | types.h rs232.h
 	${CC} -Wall -std=c99 $^ -o aurora.exe
 

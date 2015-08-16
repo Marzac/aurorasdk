@@ -1,13 +1,15 @@
 /*
     Cross-platform serial / RS232 library
-    Version 0.1, 16/06/2015
+    Version 0.2, 16/08/2015
     -> WIN32 implementation
     -> rs232-win.c
 	
     The MIT License (MIT)
 
-    Copyright (c) 2007 - 2015 Fr?d?ric Meslin
-    Contact: fredericmeslin@hotmail.com, @marzacdev
+    Copyright (c) 2013-2015 Frédéric Meslin, Florent Touchard
+	Email: fredericmeslin@hotmail.com
+	Website: www.fredslab.net
+	Twitter: @marzacdev
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -46,9 +48,9 @@ typedef struct {
 } COMDevice;
 
 /*****************************************************************************/
-#define COM_MAXDEVICES		32
-COMDevice comDevices[COM_MAXDEVICES];
-int noDevices;
+#define COM_MAXDEVICES		64
+static COMDevice comDevices[COM_MAXDEVICES];
+static int noDevices = 0;
 
 #define COM_MINDEVNAME	    16384
 const char * comPtn = "COM???";
@@ -134,7 +136,8 @@ int comEnumerate()
 	SetLastError(0);
 	QueryDosDeviceA(NULL, list, size);
 	while (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-		char * nlist = realloc(list, size *= 2);
+		size *= 2;
+		char * nlist = realloc(list, size);
 		if (!nlist) {
 			free(list);
 			return 0;
@@ -157,37 +160,43 @@ int comEnumerate()
 	return noDevices;
 }
 
+void comTerminate()
+{
+	comCloseAll();	
+}
+
 int comGetNoPorts()
 {
 	return noDevices;
 }
 
 /*****************************************************************************/
-#define COM_MAXNAME		16
-char comName[COM_MAXNAME];
 const char * comGetPortName(int index)
 {
+	#define COM_MAXNAME	32
+	static char name[COM_MAXNAME];
 	if (index < 0 || index >= noDevices)
 		return 0;
-	sprintf(comName, "COM%i", comDevices[index].port);
-	return comName;
+	sprintf(name, "COM%i", comDevices[index].port);
+	return name;
 }
 
 int comFindPort(const char * name)
 {
-	int p;
-	for (p = 0; p < noDevices; p++)
-		if (strcmp(name, comGetPortName(p)) == 0)
-			return p;
+	for (int i = 0; i < noDevices; i++)
+		if (strcmp(name, comGetPortName(i)) == 0)
+			return i;
 	return -1;
 }
 
 const char * comGetInternalName(int index)
 {
+	#define COM_MAXNAME	32
+	static char name[COM_MAXNAME];
 	if (index < 0 || index >= noDevices)
 		return 0;
-	sprintf(comName, "//./COM%i", comDevices[index].port);
-	return comName;
+	sprintf(name, "//./COM%i", comDevices[index].port);
+	return name;
 }
 
 /*****************************************************************************/
@@ -197,8 +206,10 @@ int comOpen(int index, int baudrate)
     COMMTIMEOUTS timeouts;
 	if (index < 0 || index >= noDevices) 
 		return 0;
-// Open COM port
+// Close if already open
 	COMDevice * com = &comDevices[index];
+	if (com->handle) comClose(index);
+// Open COM port
     void * handle = CreateFileA(comGetInternalName(index), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
     if (handle == INVALID_HANDLE_VALUE) 
     	return 0;
@@ -233,7 +244,6 @@ int comOpen(int index, int baudrate)
 
 void comClose(int index)
 {
-// Check the port status
 	if (index < 0 || index >= noDevices) 
 		return;
 	COMDevice * com = &comDevices[index];
