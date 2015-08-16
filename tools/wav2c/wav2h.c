@@ -1,6 +1,6 @@
 /**
  * Aurora : wavefile converter
- * 19/10/2014 V0.1
+ * 16/08/2015 V0.6
  * (c) Frédéric Meslin 2007 - 2014
  * fredericmeslin@hotmail.com
  * Main program
@@ -108,7 +108,7 @@ int main(int argc, char * argv[])
 
 // Display information	
 	printf("wav2h : utility to convert wavefiles in h files\n");
-	printf("        18/11/2014 - version 0.1\n");
+	printf("        16/08/2015 - version 0.6\n");
 	printf("(c) Frederic Meslin 2014 - fredericmeslin@hotmail.com\n");
 	printf("    Please follow me on twitter : @marzacdev\n");
 	if (argc <= 1) {

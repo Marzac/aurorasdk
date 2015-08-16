@@ -1,9 +1,9 @@
 # **
-# * Aurora : serial communication utility
-# * 19/07/2015 V0.5
+# * Aurora : bitmap converter
+# * 16/08/2015 V0.6
 # * (c) Frédéric Meslin 2014 - 2015, Florent Touchard
 # * fredericmeslin@hotmail.com
-# * Main program
+# * Makefile
 # 
 #  The MIT License (MIT)
 #
@@ -30,7 +30,9 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
  
-SOURCES=bmp2c.c
+CC := gcc
+SOURCES = bmp2c.c
+
 all: ${SOURCES} | types.h
 	${CC} -Wall -std=c99 $^ -o bmp2c.exe
 

@@ -1,6 +1,6 @@
 /**
  * Aurora : bitmap tileset converter
- * 03/01/2015 V0.3
+ * 16/08/2015 V0.6
  * (c) Frédéric Meslin 2014 - 2015
  * fredericmeslin@hotmail.com
  * Main program
@@ -149,7 +149,7 @@ int main(int argc, char * argv[])
 	int errCode = 0;
 // Display information	
 	printf("bmp2c : utility to convert bitmaps in c/h files\n");
-	printf("        09/06/2015 - version 0.3\n");
+	printf("        16/08/2015 - version 0.6\n");
 	printf("(c) Frederic Meslin 2014 - 2015 / fredericmeslin@hotmail.com\n");
 	printf("    Please follow me on twitter : @marzacdev\n\n");
 	if (argc <= 1) {

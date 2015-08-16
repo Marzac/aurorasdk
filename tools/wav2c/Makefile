@@ -1,9 +1,9 @@
 # **
-# * Aurora : serial communication utility
-# * 19/07/2015 V0.5
+# * Aurora : sample converter
+# * 16/08/2015 V0.6
 # * (c) Frédéric Meslin 2014 - 2015, Florent Touchard
 # * fredericmeslin@hotmail.com
-# * Main program
+# * Makefile
 # 
 #  The MIT License (MIT)
 #
@@ -29,8 +29,10 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-  
-SOURCES=wav2h.c
+
+CC := gcc
+SOURCES = wav2h.c
+
 all: ${SOURCES} | types.h
 	${CC} -Wall -std=c99 $^ -o wav2c.exe
 
