@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="description" content="Aurora console website" />
+	<meta name="keywords" content="open-source, programming, electronic, embedded, games, aurora, console, retrogaming, dspic, scart" />
+	<meta name="author" content="Fr&eacuted&eacuteric Meslin" />
+	<meta name="robots" content="noindex, nofollow" />
+	<meta name="revisit-after" content="3 month" />
+	<link rel="icon" type="image/png" href="../favicon.png">
+	<title>Aurora SDK</title>
+	<link rel='stylesheet' href='../css/style.css' />
+</head>
+<body>
+<div id="background"></div>
+<div id="back-logo"></div>
+	<div id="inner">
+		<div id="menu">
+			<div class="menu-item float-left">
+				<a href="../index.html">Home</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../tutorials/getstarted.html">Get started</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../hardware/video.html">Hardware</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../software/video.html">Software</a>
+			</div>
+			<div class="menu-item float-left">
+        <a href="../tools/aurora.html">Tools</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../FAQ.html">FAQ</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../contact.html">Contact</a>
+			</div>
+	</div>
+
+	<div id="nav">
+		<ul>
+		<li><a href="../software/video.html">Video</a></li>
+		<li><a href="../software/audio.html">Audio</a></li>
+		<li><a href="../software/pads.html">Gamepads</a></li>
+		<li><a href="../software/usb.html">USB</a></li>
+		<li><a href="../software/bluetooth.html">Bluetooth</a></li>
+		<li><a href="../software/intflash.html">Internal flash</a></li>
+    <li><a href="../software/extflash.html">External flash</a></li>
+		</ul>
+	</div>
+	
+	<div id="content">
+	<h3>Aurora software: USB library</h3>
+	This website regroups all documents you need to start developing games for Aurora.
+	
+	<h4>General routines:</h4>
+	
+	<blockquote>
+    <kbd>void usbInit()</kbd>
+    Initialise serial over USB peripheral.
+	</blockquote>
+
+  <h4>Configuration routines:</h4>
+  
+	<blockquote>
+    <kbd>void usbSetRate(int baudrate)</kbd>
+    <dl>
+      <dt>int baud</dt>
+      <dd>Serial baudrate</dd>
+    </dl>
+    Set the communication baudrate.
+	</blockquote>
+	
+  <h4>Communication routines:</h4>
+  
+  <blockquote>
+    <kbd>int usbRead(void * buffer, int size)</kbd>
+    <dl>
+      <dt>void * buffer</dt>
+      <dd>pointer to a receive buffer</dd>
+      <dt>int size</dt>
+      <dd>size of buffer in bytes</dd>
+      <dt>return</dt>
+      <dd>quantity of data read in bytes</dd>
+    </dl>
+    Read data from the USB receive FIFO.
+  </blockquote>
+  
+  <blockquote>
+    <kbd>int usbWrite(const void * buffer, int size)</kbd>
+    <dl>
+      <dt>const void * buffer</dt>
+      <dd>pointer to a transmit buffer</dd>
+      <dt>int size</dt>
+      <dd>size of buffer in bytes</dd>
+      <dt>return</dt>
+      <dd>quantity of data written in bytes</dd>
+    </dl>
+    Write data to the USB transmit FIFO.
+  </blockquote>
+
+  <blockquote>
+    <kbd>int usbWriteString(const char * string)</kbd>
+    <dl>
+      <dt>const char * string</dt>
+      <dd>pointer to a null-terminated string</dd>
+      <dt>return</dt>
+      <dd>number of character written</dd>
+    </dl>
+    Write a string to the USB transmit FIFO.
+  </blockquote>
+
+  <h4>Debugging support:</h4>
+  
+  <blockquote>
+    <kbd>void usbSetDebug(int enable)</kbd>
+    <dl>
+      <dt>int enable</dt>
+      <dd>enable debugging</dd>
+    </dl>
+    Enable debugging support for development tools.
+  </blockquote>
+	</div>
+	
+</div>
+
+<div id="back-copyright"></div>
+<div id="back-legal"></div>
+<div id="back-twitter">
+	<a href="https://twitter.com/MarzacDev" class="twitter-follow-button" data-show-count="false">Follow @MarzacDev</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+</body>
+</html>

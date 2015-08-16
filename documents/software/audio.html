@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="description" content="Aurora console website" />
+	<meta name="keywords" content="open-source, programming, electronic, embedded, games, aurora, console, retrogaming, dspic, scart" />
+	<meta name="author" content="Fr&eacuted&eacuteric Meslin" />
+	<meta name="robots" content="noindex, nofollow" />
+	<meta name="revisit-after" content="3 month" />
+	<link rel="icon" type="image/png" href="../favicon.png">
+	<title>Aurora SDK</title>
+	<link rel='stylesheet' href='../css/style.css' />
+</head>
+<body>
+<div id="background"></div>
+<div id="back-logo"></div>
+	<div id="inner">
+		<div id="menu">
+			<div class="menu-item float-left">
+				<a href="../index.html">Home</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../tutorials/getstarted.html">Get started</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../hardware/video.html">Hardware</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../software/video.html">Software</a>
+			</div>
+			<div class="menu-item float-left">
+        <a href="../tools/aurora.html">Tools</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../FAQ.html">FAQ</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../contact.html">Contact</a>
+			</div>
+	</div>
+
+	<div id="nav">
+		<ul>
+		<li><a href="../software/video.html">Video</a></li>
+		<li><a href="../software/audio.html">Audio</a></li>
+		<li><a href="../software/pads.html">Gamepads</a></li>
+		<li><a href="../software/usb.html">USB</a></li>
+		<li><a href="../software/bluetooth.html">Bluetooth</a></li>
+		<li><a href="../software/intflash.html">Internal flash</a></li>
+    <li><a href="../software/extflash.html">External flash</a></li>
+		</ul>
+	</div>
+	
+	<div id="content">
+	<h3>Aurora software: audio library</h3>
+	This website regroups all documents you need to start developing games for Aurora.
+	
+	<h4>Raw audio:</h4>
+  
+  <u>General routines:</u>
+  
+  <blockquote>
+    <kbd>void rawAudioUpdate()</kbd>
+    Update raw audio subsystem.
+    It performs channels modulations and must be called every frame.
+	</blockquote>
+  
+	<u>Channels control:</u>
+	<blockquote>
+    <kbd>void rawAudioInit(int channel)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    </dl>
+    Initialise channel properties and associated DSP peripherals.
+	</blockquote>
+
+  <blockquote>
+    <kbd>void rawAudioStart(int channel)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    </dl>
+    Start channel playback.
+	</blockquote>
+
+  <blockquote>
+    <kbd>void rawAudioStop(int channel)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    </dl>
+    Stop channel playback.
+	</blockquote>
+
+  <blockquote>
+    <kbd>void rawAudioPitch(int channel, int note)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    <dt>int note</dt>
+    <dd>MIDI note number</dd>
+    <dd>with 8 bits fractionnal part</dd>
+    </dl>
+    Set the channel base pitch. Notes correspond to MIDI note numbers x 256.
+    Fractionnal parts allows sub-semitone pitches. 
+	</blockquote>
+  
+	<blockquote>
+    <kbd>void rawAudioPitchMod(int channel, int speed, int amount)</kbd>
+		<dl>
+		<dt>int channel</dt>
+		<dd>channel index</dd>
+		<dt>int speed</dt>
+		<dd>modulation speed</dd>
+		<dt>int amount</dt>
+		<dd>modulation amount</dd>
+		</dl>
+    Configure a pitch modulation effect.
+	</blockquote>
+
+  <blockquote>
+    <kbd>void rawAudioPW(int channel, int pw)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    <dt>int pw</dt>
+    <dd>Pulse-width ratio</dd>
+    <dd>range</dd>
+    </dl>
+    Set the channel base pulse-width.
+	</blockquote>
+  
+	<blockquote>
+    <kbd>void rawAudioPWMod(int channel, int speed, int amount)</kbd>
+		<dl>
+		<dt>int channel</dt>
+		<dd>channel index</dd>
+		<dt>int speed</dt>
+		<dd>modulation speed</dd>
+		<dt>int amount</dt>
+		<dd>modulation amount</dd>
+		</dl>
+    Configure a pulse-width modulation effect.
+	</blockquote>
+	
+  <h4>PCM audio:</h4>
+  
+  <u>General routines:</u>
+	
+  <blockquote>
+    <kbd>void pcmAudioUpdate()</kbd>
+    Update PCM audio subsystem.
+    It services channels streaming buffers and must be called every frame.
+	</blockquote>
+  
+  <u>Channels control:</u>
+  
+  <blockquote>
+    <kbd>void pcmAudioInit(int channel)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    </dl>
+    Initialise channel properties and associated DSP peripherals.
+  </blockquote>
+
+  <blockquote>
+    <kbd>void pcmAudioStart(int channel, const FlashPage page, const FlashPtr buffer, int length)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    <dt>const FlashPage page</dt>
+    <dd>sample buffer page in flash memory</dd>
+    <dd>page can be obtained with the FLASHPAGE(p) macro</dd>
+    <dt>const FlashPtr buffer</dt>
+    <dd>sample buffer pointer in flash memory</dd>
+    <dd>pointer can be obtained with the FLASHPTR(p) macro</dd>
+    <dt>int length</dt>
+    <dd>buffer length in samples </dd>
+    </dl>
+    Start channel playback of an audio sample in Flash memory.
+  </blockquote>
+  
+  <blockquote>
+    <kbd>void pcmAudioStop(int channel)</kbd>
+    <dl>
+    <dt>int channel</dt>
+    <dd>channel index</dd>
+    </dl>
+    Stop channel playback.
+  </blockquote>
+
+  </div>
+    
+</div>
+
+<div id="back-copyright"></div>
+<div id="back-legal"></div>
+<div id="back-twitter">
+	<a href="https://twitter.com/MarzacDev" class="twitter-follow-button" data-show-count="false">Follow @MarzacDev</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+</body>
+</html>

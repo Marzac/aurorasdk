@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="description" content="Aurora console website" />
+	<meta name="keywords" content="open-source, programming, electronic, embedded, games, aurora, console, retrogaming, dspic, scart" />
+	<meta name="author" content="Fr&eacuted&eacuteric Meslin" />
+	<meta name="robots" content="noindex, nofollow" />
+	<meta name="revisit-after" content="3 month" />
+	<link rel="icon" type="image/png" href="../favicon.png">
+	<title>Aurora SDK</title>
+	<link rel='stylesheet' href='../css/style.css' />
+</head>
+<body>
+<div id="background"></div>
+<div id="back-logo"></div>
+	<div id="inner">
+		<div id="menu">
+			<div class="menu-item float-left">
+				<a href="../index.html">Home</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../tutorials/getstarted.html">Get started</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../hardware/video.html">Hardware</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../software/video.html">Software</a>
+			</div>
+			<div class="menu-item float-left">
+        <a href="../tools/aurora.html">Tools</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../FAQ.html">FAQ</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../contact.html">Contact</a>
+			</div>
+	</div>
+
+	<div id="nav">
+		<ul>
+		<li><a href="../software/video.html">Video</a></li>
+		<li><a href="../software/audio.html">Audio</a></li>
+		<li><a href="../software/pads.html">Gamepads</a></li>
+		<li><a href="../software/usb.html">USB</a></li>
+		<li><a href="../software/bluetooth.html">Bluetooth</a></li>
+		<li><a href="../software/intflash.html">Internal flash</a></li>
+    <li><a href="../software/extflash.html">External flash</a></li>
+		</ul>
+	</div>
+	
+	<div id="content">
+	<h3>Aurora software: internal flash library</h3>
+	This website regroups all documents you need to start developing games for Aurora.
+	
+	<h4>Standard routines:</h4>
+	
+	<blockquote>
+    <kbd>void flashLoad(const FlashPage page, const FlashPtr pointer, RamPtr buffer, int size)</kbd>
+    <dl>
+      <dt>const FlashPage page</dt>
+      <dd>data source page in flash memory</dd>
+      <dt>const FlashPtr pointer</dt>
+      <dd>data source pointer in flash memory</dd>
+      <dt>RamPtr buffer</dt>
+      <dd>destination pointer in standard sram</dd>
+      <dt>int size</dt>
+      <dd>size of the transfer in bytes</dd>
+    </dl>	
+    Load data from internal flash memory to standard sram.
+	</blockquote>
+
+  <h4>Block based routines:</h4>
+	<blockquote>
+    <kbd>void flashBlockRead(const FlashPage page, const FlashPtr pointer, RamPtr buffer)</kbd>
+    <dl>
+      <dt>const FlashPage page</dt>
+      <dd>block page in flash memory</dd>
+      <dt>const FlashPtr pointer</dt>
+      <dd>block pointer in flash memory</dd>
+      <dt>RamPtr buffer</dt>
+      <dd>destination pointer in standard sram</dd>
+    </dl>
+    Load a complete block (4K = 4096 bytes) from internal flash memory to standard sram.
+	</blockquote>
+  
+	<blockquote>
+    <kbd>void flashBlockErase(const FlashPage page, const FlashPtr pointer)</kbd>
+    <dl>
+      <dt>const FlashPage page</dt>
+      <dd>block page in flash memory</dd>
+      <dt>const FlashPtr pointer</dt>
+      <dd>block pointer in flash memory</dd>
+    </dl>
+    Erase a complete block (4K) of internal flash memory, filling space with 0xFF. <br>
+    Block erasing <u>is mandatory</u> before writting new data to internal flash.
+	</blockquote>	
+
+  <blockquote>
+    <kbd>void flashBlockWrite(const FlashPage page, const FlashPtr pointer, const RamPtr buffer)</kbd>
+    <dl>
+      <dt>const FlashPage page</dt>
+      <dd>block page in flash memory</dd>
+      <dt>const FlashPtr pointer</dt>
+      <dd>block pointer in flash memory</dd>
+      <dt>const RamPtr buffer</dt>
+      <dd>source pointer in standard sram</dd>
+    </dl>
+    Store a complete block (4K = 4096 bytes) from standard sram to internal flash memory.
+	</blockquote>	
+  
+	</div>
+	  
+</div>
+
+<div id="back-copyright"></div>
+<div id="back-legal"></div>
+<div id="back-twitter">
+	<a href="https://twitter.com/MarzacDev" class="twitter-follow-button" data-show-count="false">Follow @MarzacDev</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+</body>
+</html>

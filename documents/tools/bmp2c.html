@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="description" content="Aurora console website" />
+	<meta name="keywords" content="open-source, programming, electronic, embedded, games, aurora, console, retrogaming, dspic, scart" />
+	<meta name="author" content="Fr&eacuted&eacuteric Meslin" />
+	<meta name="robots" content="noindex, nofollow" />
+	<meta name="revisit-after" content="3 month" />
+	<link rel="icon" type="image/png" href="../favicon.png">
+	<title>Aurora SDK</title>
+	<link rel='stylesheet' href='../css/style.css' />
+</head>
+<body>
+<div id="background"></div>
+<div id="back-logo"></div>
+	<div id="inner">
+		<div id="menu">
+			<div class="menu-item float-left">
+				<a href="../index.html">Home</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../tutorials/getstarted.html">Get started</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../hardware/video.html">Hardware</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../software/video.html">Software</a>
+			</div>
+			<div class="menu-item float-left">
+			<a href="../tools/tools.html">Tools</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../FAQ.html">FAQ</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../contact.html">Contact</a>
+			</div>
+	</div>
+
+	<div id="nav">
+		<ul>
+		<li><a href="../tools/aurora.html">aurora.exe</a></li>
+		<li><a href="../tools/bmp2c.html">bmp2c.exe</a></li>
+		<li><a href="../tools/wav2c.html">wav2c.exe</a></li>
+		</ul>
+	</div>
+	
+	<div id="content">
+
+	<h3>Aurora software: bitmap conversion tool</h3>
+  <h1>bmp2c.exe</h1>
+
+  <b>bmp2c.exe</b> is a command line application to format and convert bitmaps into resource (*.c & *.h) files.
+
+  <h3>Overall features:</h3>
+  <b>bmp2c</b> transforms bitmaps for aurora programs. It can:
+  <ul>
+    <li>cut large images in small tiles / sprites</li>
+    <li>convert or adapt pixel format</li>
+    <li>apply a color key for mask transparency</li>
+    <li>extract individual tiles in multiple pixels arrays (for sprites)</li>
+    <li>compact tiles in a single pixels array (for tilesets)</li>
+    <li>allocate the flash pages for storing pixels array</li>
+    <li>exporting bitmaps to preview the processing results</li>
+  </ul>
+  Features in <span style="color:red">red characters</span> are not implemented but planned. <br/>
+    
+  <h3>Call syntax:</h3>
+  
+  <b>bmp2c.exe</b> can be called without arguments to get infomation about the calling syntax.<br/><br/>
+                
+  The <b>bmp2c</b> call syntax is the following:<br/>
+  <kbd>&gt bmp2c [in.bmp] [out.c] [-g 16] [-p PAGEA] [-r tile] [-t 0xFF00FF] [-d] [-x] [-c] [-b]</kbd>
+  <br/>
+
+  <dl>
+    <dt><kbd>in.bmp</kbd></dt>
+    <dd>is the bitmap input file. It must be the first argument.</dd>
+    <dt><kbd>out.c</kbd></dt>
+    <dd>is the source output file. It must be the second argument.<br/> Default is <i>out.c</i>.</dd>
+    <dt><kbd>-g 16</kbd></dt>
+    <dd>is the single tile / sprite size in pixels. Default is <i>16</i> pixels.</dd>
+    <dt><kbd>-p PAGEA</kbd></dt>
+    <dd>is the 32k flash page where pixels data will be allocated.<br/> Default is <i>PAGEA</i>.</dd>
+    <dt><kbd>-r tile</kbd></dt>
+    <dd>is the name radical for pixel data arrays.<br/> Default is <i>tile</i>.</dd>
+    <dt><kbd>-t 0xFF00FF</kbd></dt>
+    <dd>is the color key used to mask pixels.<br/> Default is <i>pink or 0xFF00FF</i>.</dd>
+    <dt><kbd>-d</kbd></dt>
+    <dd>disable transparency. Must be used for totally opaque image (no color key, no alpha channel).</dd>
+    <dt><kbd>-x</kbd></dt>
+    <dd>extract tiles. Create separate pixels arrays for every sprite / tile.</dd>
+    <dt><kbd>-c</kbd></dt>
+    <dd>compact tiles. Arrange tiles in a single column and create a unique pixel array.</dd>
+    <dt><kbd>-b</kbd></dt>
+    <dd>export results in bitmap. Export the resulting tiles / sprites in bitmap(s).</dd>
+  </dl>
+    
+  <h3>Use cases:</h3>
+  <blockquote>
+    <b>Convert a backgound image:</b>
+    <kbd>&gt bmp2c background-sky.bmp sky.c -r sky</kbd>
+    This command will generate two files: sky.c and sky.h containing the <i>background-sky.bmp</i> pixels in one single array.
+    The array will be allocated in <i>PAGEA</i> and named <i>sky</i>.
+  </blockquote>
+   
+  <blockquote>
+    <b>Convert a tileset:</b>
+    <kbd>&gt bmp2c tileset-forest.bmp forest.c -g 8 -r forest -c</kbd>
+    This command will generate two files: forest.c and forest.h all tiles from <i>tileset-forest.bmp</i> tileset.
+    The source tileset will be first cut in 8 x 8 square tiles. Then, all the tiles will be arranged in a single column and
+    exported as a unique array called <i>forest</i> and allocated in <i>PAGEA</i>. 
+  </blockquote>
+
+  <blockquote>
+    <b>Make sprites of a spriteset:</b>
+    <kbd>&gt bmp2c spriteset-robot.bmp robot.c -g 16 -r robot -x -t 0xFF0000</kbd>
+    This command will generate two files: robot.c and robot.h containing all sprites from <i>spriteset-robot.bmp</i> spriteset.
+    The source spriteset will be first cut in 16 x 16 square sprites. A color key of 0xFF0000 (pure red) will be used to mark out
+    areas which should be transparent at drawing. Then, all the sprites will exported as separate arrays named <i>robot</i>
+    followed by an indice and allocated in <i>PAGEA</i>.
+  </blockquote>
+    
+  <h3>Supported bitmap formats:</h3>
+  
+  <b>bmp2c.exe</b> <u>only</u> supports 24 and 32 bits windows uncompressed bitmap formats.<br/>
+  Please convert other formats bitmaps before processing them with <b>bmp2c.exe</b>.<br/>
+  For this purpose, you can use any capable software such as:<br/>
+  <ul>
+    <li><a href="http://www.gimp.org" target="_blank"> GIMP (cross-platforms)</a></li>
+    <li><a href="http://www.getpaint.net" target="_blank">Paint.NET (windows)</a></li>
+  </ul>
+  
+  <h3> Note on color keying & alpha channel:</h3>
+  Aurora video system expects pixels to be encoded in a 16 bits ABGR(4444) format.<br/>
+  <b>bmp2c.exe</b> always discretizes and formats pixels data to this format.
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Bits</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>15..12</td>
+        <td><b>Alpha</b></td>
+        <td>From 0 to 15. 0 is transparent, 15 is opaque.</td>
+      </tr>
+      <tr>
+        <td>11..8</td>
+        <td><b>Blue</b></td>
+        <td>From 0 to 15.</td>
+      </tr>
+      <tr>
+        <td>7..4</td>
+        <td><b>Green</b></td>
+        <td>From 0 to 15.</td>
+      </tr>
+      <tr>
+        <td>3..0</td>
+        <td><b>Red</b></td>
+        <td>From 0 to 15.</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  Current video mode <u>does not</u> support alpha blending.<br/><br/>
+  Alpha channel is encoded by <b>bmp2c.exe</b> for further developments and video modes.<br/>
+  Color 0 (transparent black color) means the pixel will not be drawn. It is the <u>only</u> transparent color currently available.<br/>
+  <b>bmp2c.exe</b> can substitute any color by color 0 setting a color key with <kbd>-t color</kbd> parameter.
+</div>
+</div>
+  </div>
+  
+</div>
+
+<div id="back-copyright"></div>
+<div id="back-legal"></div>
+<div id="back-twitter">
+	<a href="https://twitter.com/MarzacDev" class="twitter-follow-button" data-show-count="false">Follow @MarzacDev</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="description" content="Aurora console website" />
+	<meta name="keywords" content="open-source, programming, electronic, embedded, games, aurora, console, retrogaming, dspic, scart" />
+	<meta name="author" content="Fr&eacuted&eacuteric Meslin" />
+	<meta name="robots" content="noindex, nofollow" />
+	<meta name="revisit-after" content="3 month" />
+	<link rel="icon" type="image/png" href="../favicon.png">
+	<title>Aurora SDK</title>
+	<link rel='stylesheet' href='../css/style.css' />
+</head>
+<body>
+<div id="background"></div>
+<div id="back-logo"></div>
+	<div id="inner">
+		<div id="menu">
+			<div class="menu-item float-left">
+				<a href="../index.html">Home</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../tutorials/getstarted.html">Get started</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../hardware/video.html">Hardware</a>
+			</div>
+			<div class="menu-item float-left">
+				<a href="../software/video.html">Software</a>
+			</div>
+			<div class="menu-item float-left">
+			<a href="../tools/tools.html">Tools</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../FAQ.html">FAQ</a>
+			</div>
+			<div class="menu-item float-right">
+				<a href="../contact.html">Contact</a>
+			</div>
+	</div>
+
+	<div id="nav">
+		<ul>
+		<li><a href="../tools/aurora.html">aurora.exe</a></li>
+		<li><a href="../tools/bmp2c.html">bmp2c.exe</a></li>
+		<li><a href="../tools/wav2c.html">wav2c.exe</a></li>
+		</ul>
+	</div>
+	
+	<div id="content">
+
+	<h3>Aurora software: development / communication tool</h3>
+  <h1>aurora.exe</h1>
+  
+  <b>aurora.exe</b> is the command line application to communicate with the Aurora console.<br/>
+
+  <h3>Overall features:</h3>
+      
+  <b>aurora.exe</b> provides services related to program transfer and debug. The application can:
+  <ul>
+    <li>transfer executable files</li>
+    <li>erase internal flash memory</li>
+    <li><span style="color:red">manage external flash content</span></li>
+    <li><span style="color:red">run, pause and reset programs execution</span></li>
+    <li><span style="color:red">view standard sram content</span></li>
+    <li>get information about hardware and software revisions</li>
+  </ul>
+  Features in <span style="color:red">red characters</span> are not implemented but planned. <br/>
+
+  <h3>Call syntax:</h3>
+
+  <b>aurora.exe</b> can be called without arguments to view the help.<br/><br/>
+  The <b>aurora</b> call syntax is the following:<br/>
+  <kbd>&gt aurora [-c auto][-b 230400][-l][-e][-r][-x][-v][-tx][-f program.hex]</kbd>
+  <br/>
+  
+  <dl>
+    <dt><kbd>-c auto</kbd></dt>
+    <dd>use a specific serial com port.
+    Values can be:
+    <ul>
+    <li><b>Windows</b>: COM0, COM1 ... auto.</li>
+    <li><b>Linux</b>: ttyUSB0, ..., rfcomm0 ... auto.</li>
+    <li><b>Mac OS</b>: tty.usbserial-xxx, ..., tty.aurora-xxx ... auto.</li>
+    </ul>
+    Default is <i>auto</i>, all ports are polled until aurora console answers.</dd>
+    <dt><kbd>-b 230400</kbd></dt>
+    <dd>set the communication baudrate. Default is <i>230400</i>.</dd>
+    <dt><kbd>-l</kbd></dt>
+    <dd>list available serial ports.</dd>
+    <dt><kbd>-e</kbd></dt>
+    <dd>erase internal flash memory.</dd>
+    <dt><kbd>-r</kbd></dt>
+    <dd>reboot the DSP.</dd>
+    <dt><kbd>-x</kbd></dt>
+    <dd>run program in internal flash memory.</dd>
+    <dt><kbd>-v</kbd></dt>
+    <dd>get console hardware and bootloader revision.</dd>
+    <dt><kbd>-tx</kbd></dt>
+    <dd>toggle debug led <kbd>x</kbd> (1 or 2) state.</dd>
+    <dt><kbd>-f program.hex</kbd></dt>
+    <dd>transfer program <kbd>program.hex</kbd> in internal flash.</dd>
+  </dl>
+  
+  <h3>Use cases:</h3>
+  
+  <blockquote>
+    <b>Transfer a program:</b>
+    <kbd>&gt aurora -f blasteroid.hex -x</kbd>
+    This command will try to detect the aurora console and then transfer the <em>blasteroid.hex</em> program to the internal flash.
+    When the transfer is completed, the program will be executed.
+  </blockquote>
+ 
+  <blockquote>
+    <b>Clear internal flash memory:</b>
+    <kbd>&gt aurora -e</kbd>
+    This command will completely erase the content of the internal flash memory.
+  </blockquote>
+  
+  <blockquote>
+    <b>List available serial ports:</b>
+    <kbd>&gt aurora -l</kbd>
+    This command will list all accessible serial com ports on the computer.
+  </blockquote>
+  </div>
+  
+</div>
+
+<div id="back-copyright"></div>
+<div id="back-legal"></div>
+<div id="back-twitter">
+	<a href="https://twitter.com/MarzacDev" class="twitter-follow-button" data-show-count="false">Follow @MarzacDev</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</div>
+</body>
+</html>
