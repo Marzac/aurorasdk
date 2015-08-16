@@ -67,8 +67,8 @@
 
 /******************************************************************************/
 /* Gamepads functions */
-    int padsRead(int pad, int group);
     void padsPower(int enable);
+    int  padsRead(int pad, int group);
 
 
 #endif	/* PADS_H */

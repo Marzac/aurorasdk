@@ -148,7 +148,7 @@ mulw.uu, w0, #RAW_STR_SIZE, w2		; compute the pointer
 add w2, w1, w1
 clr w2
 mov #0x7fff, w3
-mov w2, [w1+#RAW_PITCH]				; initialise pitch
+mov w2, [w1+RAW_PITCH]				; initialise pitch
 mov w2, [w1+RAW_PITCH_SPEED]		; initialise pitch mod. speed
 mov w2, [w1+RAW_PITCH_AMOUNT]		; initialise pitch mod. amount
 mov w3, [w1+RAW_PW]					; initialise pw
@@ -526,13 +526,14 @@ pop w1
 pop w0
 return
 
-; void pcmAudioPlay(int channel, FlashPtr samples, uint length)
+; void pcmAudioStart(int channel, const FlashPage page, const FlashPtr buffer, int length)
 ; Play a given samples buffer through the specified channel
 ; param[in] w0 channel index 
-; param[in] w1 buffer address in flash
-; param[in] w2 length of buffer in samples
+; param[in] w1 buffer page in flash
+; param[in] w2 buffer pointer in flash
+; param[in] w3 length of buffer in samples
 ; return nothing
-pcmAudioPlay:
+pcmAudioStart:
 return
 
 ; void pcmAudioStop(int channel)

@@ -36,10 +36,13 @@
 
 ; Flash exported functions
 .global _flashLoad
+.global _flashBlockRead
+.global _flashBlockErase
+.global _flashBlockWrite
 
 .text
 /******************************************************************************/
-; void flashLoad(const FlashPage page, const FlashPtr src, RamPtr dst, u16 size)
+; void flashLoad(const FlashPage page, const FlashPtr pointer, RamPtr buffer, int size)
 ; Load a memory block from FLASH to RAM
 ; param[in] w0 FLASH EDS page
 ; param[in] w1 FLASH source pointer
@@ -54,6 +57,34 @@ dec w3, w3
 repeat w3
 mov [w1++], [w2++]
 pop DSRPAG
+return
+
+
+/******************************************************************************/
+; void flashBlockRead(const FlashPage page, const FlashPtr pointer, RamPtr buffer)
+; Read a complete block (4k) from DSP FLASH
+; param[in] w0 FLASH EDS page
+; param[in] w1 FLASH source pointer
+; param[in] w2 RAM destination pointer
+; return nothing
+_flashBlockRead:
+return
+
+; void flashBlockErase(const FlashPage page, const FlashPtr pointer)
+; Erase a complete block (4k) of DSP FLASH
+; param[in] w0 FLASH EDS page
+; param[in] w1 FLASH source pointer
+; return nothing
+_flashBlockErase:
+return
+
+; void flashBlockWrite(const FlashPage page, const FlashPtr pointer, const RamPtr buffer)
+; Write a complete block (4k) in DSP FLASH
+; param[in] w0 FLASH EDS page
+; param[in] w1 FLASH destination pointer
+; param[in] w2 RAM source pointer
+; return nothing
+_flashBlockWrite:
 return
 
 .end

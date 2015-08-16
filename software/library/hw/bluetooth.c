@@ -73,6 +73,11 @@ const int const blueBauds[] = {
 void blueRXInterrupt();
 void blueTXInterrupt();
 
+/*****************************************************************************/
+/* Bluetooth flash configuration */
+extern const char * _blueDefaultName;
+extern const char * _blueDefaultPass;
+
 /******************************************************************************/
 u8 blueRX[BLUE_RXTX_SIZE];
 u8 blueTX[BLUE_RXTX_SIZE];
@@ -88,8 +93,8 @@ void blueInit()
     BLUEAT_PIN = 0;
     BLUERESET_PIN = 1;
 // Initialise module state
-    blueMode = BLUE_MODE_AT;
-    blueBaud = BLUE_38400;
+    blueMode = BLUE_MODE_COM;
+    blueBaud = BLUE_230400;
     blueRXRd = blueRXWr = 0;
     blueTXRd = blueTXWr = 0;
 // Initialise the USART
@@ -104,13 +109,11 @@ void blueInit()
 
 void blueConfigure()
 {
-    char defName[] = "Aurora";
-    char defPassword[] = "1234";
 // Set default configuration
     blueSetMode(BLUE_MODE_AT);
     blueSetRole(BLUE_ROLE_SLAVE);
-    blueSetName(defName);
-    blueSetPassword(defPassword);
+    blueSetName(blueDefaultName);
+    blueSetPassword(blueDefaultPass);
     blueSetRate(BLUE_230400);
     blueSetMode(BLUE_MODE_COM);
 }
@@ -139,6 +142,8 @@ void blueSetMode(int mode)
 /*****************************************************************************/
 void blueSetRole(int role)
 {
+	if (blueMode != BLUE_MODE_AT)
+		return;
     char cmd[] = "AT+ROLE=x\r\n";
     cmd[8] = '0' + role;
     blueWriteText(cmd);
@@ -147,6 +152,8 @@ void blueSetRole(int role)
 
 void blueSetName(const char * name)
 {
+	if (blueMode != BLUE_MODE_AT)
+		return;
     char cmd[] = "AT+NAME=";
     blueWriteText(cmd);
     blueWriteText(name);
@@ -156,6 +163,8 @@ void blueSetName(const char * name)
 
 void blueSetPassword(const char * password)
 {
+	if (blueMode != BLUE_MODE_AT)
+		return;
     char cmd[] = "AT+PSWD=";
     blueWriteText(cmd);
     blueWrite(password, 4);
@@ -163,13 +172,15 @@ void blueSetPassword(const char * password)
     delay100ms();
 }
 
-void blueSetRate(int baud)
+void blueSetRate(int baudrate)
 {
+	if (blueMode != BLUE_MODE_AT)
+		return;
     char cmd[] = "AT+UART=";
     blueWriteText(cmd);
-    blueWriteText(blueRates[baud]);
+    blueWriteText(blueRates[baudrate]);
     blueWriteText(",0,0\r\n");
-    blueBaud = baud;
+    blueBaud = baudrate;
     delay100ms();
 }
 
@@ -212,16 +223,16 @@ int blueWrite(const void * buffer, int length)
     return length - len;
 }
 */
-int blueWriteText(const char * text)
+int blueWriteString(const char * string)
 {
     int len = 0;
-    const char * t = text;
-    while (*t ++) len ++;
-    return blueWrite(text, len);
+    const char * s = string;
+    while (*s ++) len ++;
+    return blueWrite(string, len);
 }
 
 /*****************************************************************************/
-void blueEnableDebug(int enable)
+void blueSetDebug(int enable)
 {
 
 }

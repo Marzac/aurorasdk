@@ -38,7 +38,11 @@
 
 /******************************************************************************/
 /* Internal FLASH functions */
-    void flashLoad(const FlashPage page, const FlashPtr src, RamPtr dst, u16 size);
-
+    void flashLoad(const FlashPage page, const FlashPtr pointer, RamPtr buffer, int size);
+	
+	void flashBlockRead(const FlashPage page, const FlashPtr pointer, RamPtr buffer);
+	void flashBlockErase(const FlashPage page, const FlashPtr pointer);
+	void flashBlockWrite(const FlashPage page, const FlashPtr pointer, const RamPtr buffer);
+	
 #endif	/* INTFLASH_H */
 

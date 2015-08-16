@@ -73,12 +73,12 @@
     void blueSetRole(int role);
     void blueSetName(const char * name);
     void blueSetPassword(const char * pass);
-    void blueSetRate(int baud);
+    void blueSetRate(int baudrate);
 
     int blueRead(void * buffer, int size);
     int blueWrite(const void * buffer, int size);
-    int blueWriteText(const char * text);
+    int blueWriteString(const char * string);
 
-    void blueEnableDebug(int enable);
+    void blueSetDebug(int enable);
 
 #endif	/* BLUETOOTH_H */

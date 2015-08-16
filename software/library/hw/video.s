@@ -6,13 +6,9 @@
  *
  * This module only makes use of timer5 peripheral.
  *
- * Until this project is publicly released under an open-source or creative,
- * commons licence these sources remains PROPRIETARY and CONFIDENTIAL.
- * Please do not distribute without prior agreement.
- *
- * Please respect this work by making your best use of it. As you will notice,
- * this program has required a great dose of patience, passion and dedication
- * to be written properly.
+ * Please make best use of this work. As you will notice, this program has
+ * required a great dose of patience, passion and dedication so it performs
+ * properly.
  *
  * This is damned cycle precise assembly folks !
  
@@ -64,13 +60,13 @@
 ;
 ; typedef struct {
 ;	u16 * raster;
-;   int y;
-;   u16 * pixels;
-;   u16 * line;
-;   SpriteStr * prev;
-;   SpriteStr * next;
-;   int zorder;
-;   uint flags;
+;	int y;
+;	u16 * pixels;
+;	u16 * line;
+;	SpriteStr * prev;
+;	SpriteStr * next;
+;	int zorder;
+;	uint flags;
 ; }SpriteStr;
 ;
 ; This sprite structure is organised to speed up the rendering routine.

@@ -86,12 +86,12 @@ void usbInit()
     IEC0bits.U1TXIE = 1;
 }
 
-void usbSetRate(int baud)
+void usbSetRate(int baudrate)
 {
     while(!U1STAbits.TRMT);
     U1MODE = 0;    
-    U1BRG = usbBauds[baud];
-    usbBaud = baud;
+    U1BRG = usbBauds[baudrate];
+    usbBaud = baudrate;
     usbRXRd = usbRXWr;
     usbTXRd = usbTXWr;
     U1MODE = _U1MODE_BRGH_MASK | _U1MODE_UARTEN_MASK;
@@ -104,12 +104,12 @@ int usbWrite(const void * buffer, int size)
     return 0;
 }
 
-int usbWriteText(const char * text)
+int usbWriteString(const char * string)
 {
     int len = 0;
-    const char * t = text;
-    while (*t ++) len ++;
-    return usbWrite(text, len);
+    const char * s = string;
+    while (*s ++) len ++;
+    return usbWrite(string, len);
 }
 
 int usbRead(void * buffer, int length)
@@ -118,7 +118,7 @@ int usbRead(void * buffer, int length)
 }
 
 /******************************************************************************/
-void usbEnableDebug(int enable)
+void usbSetDebug(int enable)
 {
 
 }

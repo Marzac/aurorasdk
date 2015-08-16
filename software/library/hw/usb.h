@@ -32,8 +32,8 @@
   SOFTWARE.
  */
 
-#ifndef BLUETOOTH_H
-#define	BLUETOOTH_H
+#ifndef USB_H
+#define	USB_H
 
     #include "../aurora.h"
 
@@ -55,12 +55,12 @@
 
 /******************************************************************************/
     void usbInit();
-    void usbSetRate(int baud);
+    void usbSetRate(int baudrate);
 
     int usbRead(void * buffer, int size);
     int usbWrite(const void * buffer, int size);
-    int usbWriteText(const char * text);
+    int usbWriteString(const char * string);
 
-    void usbSetDebug(int enabled);
+    void usbSetDebug(int enable);
 
-#endif	/* BLUETOOTH_H */
+#endif	/* USB */

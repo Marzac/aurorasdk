@@ -48,20 +48,22 @@
     
 /******************************************************************************/
 /* RAW audio functions */
+    void rawAudioUpdate();
+	
     void rawAudioInit(int channel);
     void rawAudioStart(int channel);
     void rawAudioStop(int channel);
     void rawAudioPitch(int channel, int note);
     void rawAudioPitchMod(int channel, int speed, int amount);
-    void rawAudioPW(int channel, int pwm);
+    void rawAudioPW(int channel, int pw);
     void rawAudioPWMod(int channel, int speed, int amount);
-    void rawAudioUpdate();
 
 /* PCM audio functions */
-    void pcmAudioInit(int channel);
-    void pcmAudioPlay(int channel, FlashPtr samples, uint length);
-    void pcmAudioStop(int channel);
     void pcmAudioUpdate();
+	
+    void pcmAudioInit(int channel);
+    void pcmAudioStart(int channel, const FlashPage page, const FlashPtr buffer, int length);
+    void pcmAudioStop(int channel);
     
 #endif	/* AUDIO_H */
 
