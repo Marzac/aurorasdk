@@ -111,7 +111,7 @@ int comFindPort(const char * name)
 {
     int p;
     for (p = 0; p < noDevices; p++)
-        if (strcmp(name, &comDevices[p].port[5]) == 0)
+        if (strcmp(name, comDevices[p].port) == 0)
             return p;
     return -1;
 }
@@ -150,9 +150,10 @@ int comOpen(int index, int baudrate)
     struct termios config;
     memset(&config, 0, sizeof(config));
     tcgetattr(handle, &config);
-	config.c_iflag &= ~(INLCR | ICRNL);
+	//config.c_iflag &= ~(INLCR | ICRNL);
     config.c_iflag |= IGNPAR | IGNBRK;
-    config.c_oflag &= ~(OPOST | ONLCR | OCRNL);
+    //config.c_oflag &= ~(OPOST | ONLCR | OCRNL);
+	config.c_oflag &= ~OPOST;
     config.c_cflag &= ~(PARENB | PARODD | CSTOPB | CSIZE | CRTSCTS);
     config.c_cflag |= CLOCAL | CREAD | CS8;
     config.c_lflag &= ~(ICANON | ISIG | ECHO);
