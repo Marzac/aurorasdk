@@ -53,7 +53,7 @@
 /** Base name for COM devices */
 #if defined(__APPLE__) && defined(__MACH__)
 	static const char * devBases[] = {
-		"/dev/tty."
+		"tty."
 	};
 	static int noBases = 1;
 #else
@@ -141,19 +141,17 @@ int comOpen(int index, int baudrate)
 	COMDevice * com = &comDevices[index];
 	if (com->handle >= 0) comClose(index);
 // Open port
-	printf("Try %s \n", comGetInternalName(index));
     int handle = open(comGetInternalName(index), O_RDWR | O_NOCTTY | O_NDELAY);
     if (handle < 0)
         return 0;
-	printf("Open %s \n", comGetInternalName(index));
 // General configuration
     struct termios config;
     memset(&config, 0, sizeof(config));
     tcgetattr(handle, &config);
-	//config.c_iflag &= ~(INLCR | ICRNL);
+	config.c_iflag &= ~(INLCR | ICRNL);
     config.c_iflag |= IGNPAR | IGNBRK;
-    //config.c_oflag &= ~(OPOST | ONLCR | OCRNL);
-	config.c_oflag &= ~OPOST;
+    config.c_oflag &= ~(OPOST | ONLCR | OCRNL);
+	//config.c_oflag &= ~OPOST;
     config.c_cflag &= ~(PARENB | PARODD | CSTOPB | CSIZE | CRTSCTS);
     config.c_cflag |= CLOCAL | CREAD | CS8;
     config.c_lflag &= ~(ICANON | ISIG | ECHO);
